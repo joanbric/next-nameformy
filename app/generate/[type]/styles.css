@@ -1,0 +1,36 @@
+.prompt{
+  font-size: 2rem;
+  text-align: center;
+  color: #e4c1f8;
+  border: 1px solid #e4c1f8;
+  border-radius: 10px;
+  box-shadow: 0 0 20px #9AA9CD;
+  padding: 6px 4px;
+  margin-block-end: 50px;
+  text-wrap: balance;
+}
+
+.prompt .secondary{
+  color: white;
+}
+
+h1{
+  font-size: 3rem
+}
+
+h2{
+  font-family: var(--font-calistoga);
+  font-size: 1.4rem;
+  margin-block: 30px 10px;
+}
+.charac-item{
+  background:#535D74;
+  padding: 5px 8px;
+  border-radius: 6px;
+}
+
+input[type="text"]{
+  width: 800px;
+  display: block;
+
+}

@@ -17,5 +17,14 @@
 body {
   color: var(--foreground);
   background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+}
+
+input, textarea{
+  background-color: #535D74;
+  border-radius: 6px;
+  padding: 4px 6px;
+}
+input:focus, textarea:focus{
+  outline: 1px solid #E0A540;
+
 }
