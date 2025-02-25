@@ -47,7 +47,7 @@ export default function GenerateRouter({
     if (input.current) {
       const value = input.current.value
       if (value && value.length > 0) {
-        window.location.href = `/generate/${value.toLowerCase()}`
+        window.location.href = `/generate/${value}`
       }
     }
   }
