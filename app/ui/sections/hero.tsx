@@ -1,19 +1,8 @@
-'use client'
-import GenerateRouter from '@ui/GenerateRouter'
 import Link from 'next/link'
-import { useRef } from 'react'
 
 export default function Hero() {
-  const modal = useRef<HTMLDialogElement | null>(null)
-
-  const handleClick = () => {
-    if (modal.current) {
-      modal.current.showModal()
-    }
-  }
   return (
     <>
-      <GenerateRouter ref={modal} />
       <section className="text-center flex flex-col items-center">
         <h1 className="text-[4rem] text-balance  font-[family-name:var(--font-calistoga)]">
           Find the Perfect Name with{' '}
@@ -29,9 +18,9 @@ export default function Hero() {
           preferences!
         </p>
 
-        <button onClick={handleClick} className="text-[1.2rem] mt-8 font-[family-name:var(--font-poppins)] bg-primary py-4 px-6 rounded-lg font-bold">
+        <Link href='generate/' className="text-[1.2rem] mt-8 font-[family-name:var(--font-poppins)] bg-primary py-4 px-6 rounded-lg font-bold">
           Start naming now!
-        </button>
+        </Link>
       </section>
     </>
   )

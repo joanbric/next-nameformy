@@ -1,15 +1,15 @@
 import { CircleX } from 'lucide-react'
 import { title } from 'process'
-
+type props = {
+  children: React.ReactNode
+  ref: React.RefObject<HTMLDialogElement | null>
+  title: string
+}
 export default function ModalLayout({
   children,
   ref,
   title
-}: Readonly<{
-  children: React.ReactNode
-  ref: React.Ref<HTMLDialogElement>
-  title: string
-}>) {
+}: props) {
   return (
     <dialog
       ref={ref}
@@ -19,7 +19,8 @@ export default function ModalLayout({
         <h3 className="text-2xl font-[family-name:var(--font-calistoga)]">
           {title}{' '}
         </h3>
-        <CircleX  color="#FF7373"/>
+        {ref.current !== null && <button onClick={() => ref.current?.close()}><CircleX  color="#FF7373"/></button>}
+        {/* <button onClick={() => ref}><CircleX  color="#FF7373"/></button> */}
       </header>
       {children}
     </dialog>

@@ -1,6 +1,9 @@
 'use client'
-import { use, useState } from 'react'
+import { type AIResponse } from '@/types'
+import { use, useRef, useState } from 'react'
 import './styles.css'
+import { generateName } from '@/actions'
+import NamesSuggested from '@/ui/NamesSuggested'
 const characteristics = [
   'Short and catchy',
   'Descriptive and informative',
@@ -45,11 +48,22 @@ export default function Generate({
   const [meaning, setMeaning] = useState<string | null>(null)
   const [language, setLanguage] = useState<string | null>(null)
   const [keywords, setKeywords] = useState<string | null>(null)
+  const [response, setResponse] = useState<AIResponse[] | null>(null)
+  const modal = useRef<HTMLDialogElement | null>(null)
+  const subject = decodeURIComponent(use(params).type)
+  const handleGenerateName = async () => {
+     modal.current?.showModal() 
+     const res = await generateName({subject, characteristic, meaning, language, keywords})
+     setResponse(res.res)
+     console.log(response)
+  }
 
   return (
     <main className="max-w-[1000px] mx-auto px-4">
+      <NamesSuggested ref={modal} response={response} handleClick={handleGenerateName}/>
+      {response && <h1>{response[0].name}</h1>}
       <Prompt
-        type={decodeURIComponent(use(params).type)}
+        type={subject}
         characteristic={characteristic}
         meaning={meaning}
         language={language}
@@ -61,7 +75,7 @@ export default function Generate({
         <ul className="flex flex-wrap gap-3 max-w-[800px] mb-3">
           {characteristics.map((characteristic, index) => (
             <li key={index}>
-              <button className='charac-item' onClick={() => setCharacteristics(characteristic)}>
+              <button className='charac-item' onClick={() => {setCharacteristics(characteristic)}}>
                 {characteristic}
               </button>
             </li>
@@ -69,9 +83,11 @@ export default function Generate({
         </ul>
         <input
           onChange={(e) => setCharacteristics(e.target.value)}
+          value={characteristic ? characteristic : ''}
           className="w-full max-w-[50ch] "
           type="text"
           placeholder="Other (please specify)"
+aria-label="Specify other characteristic"
         />
         <h2>A specific etymology or meaning </h2>
         <input
@@ -108,7 +124,7 @@ export default function Generate({
         </h2>
       </section>
 
-      <button className='text-[1rem] mt-8 font-[family-name:var(--font-poppins)] bg-primary py-3 px-5 rounded-lg font-bold'>Generate name</button>
+      <button onClick={handleGenerateName} className='text-[1rem] mt-8 font-[family-name:var(--font-poppins)] bg-primary py-3 px-5 rounded-lg font-bold'>Generate name</button>
       <aside>
         <h4>Please note</h4>
         <p>
