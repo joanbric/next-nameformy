@@ -1,8 +1,6 @@
 'use client'
-import { type AIResponse } from '@/types'
-import { use, useRef, useState } from 'react'
+import { use, useState } from 'react'
 import './styles.css'
-import NamesSuggested from '@/ui/NamesSuggested'
 const characteristics = [
   'Short and catchy',
   'Descriptive and informative',
@@ -47,11 +45,8 @@ export default function Generate({
   const [meaning, setMeaning] = useState<string | null>(null)
   const [language, setLanguage] = useState<string | null>(null)
   const [keywords, setKeywords] = useState<string | null>(null)
-  const [response, setResponse] = useState<AIResponse[] | null>(null)
-  const modal = useRef<HTMLDialogElement | null>(null)
   const subject = decodeURIComponent(use(params).type)
   const handleGenerateName = async () => {
-     modal.current?.showModal() 
 
 
      const res = await fetch(`/api/generate?subject=${subject}`)
@@ -64,8 +59,6 @@ export default function Generate({
 
   return (
     <main className="max-w-[1000px] mx-auto px-4">
-      <NamesSuggested ref={modal} response={response} handleClick={handleGenerateName}/>
-      {response && <h1>{response[0].name}</h1>}
       <Prompt
         type={subject}
         characteristic={characteristic}
