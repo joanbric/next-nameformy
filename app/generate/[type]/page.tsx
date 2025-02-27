@@ -2,7 +2,6 @@
 import { type AIResponse } from '@/types'
 import { use, useRef, useState } from 'react'
 import './styles.css'
-import { generateName } from '@/actions'
 import NamesSuggested from '@/ui/NamesSuggested'
 const characteristics = [
   'Short and catchy',
@@ -53,9 +52,14 @@ export default function Generate({
   const subject = decodeURIComponent(use(params).type)
   const handleGenerateName = async () => {
      modal.current?.showModal() 
-     const res = await generateName({subject, characteristic, meaning, language, keywords})
-     setResponse(res.res)
-     console.log(response)
+
+
+     const res = await fetch(`/api/generate?subject=${subject}`)
+    //  const res = await generateName({subject, characteristic, meaning, language, keywords})
+    //  setResponse(res.res)
+    const data = await res.json()
+
+     console.log(data)
   }
 
   return (
