@@ -1,5 +1,4 @@
 import Input from '@ui/Input'
-import { ChevronRight } from 'lucide-react'
 import Link from 'next/link'
 
 const things = [

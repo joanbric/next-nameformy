@@ -13,7 +13,7 @@ export default function Hero() {
           places, and more instantly using advanced AI technology.
         </p>
         <p className="text-[1.2rem] text-balance max-w-[900px] font-[family-name:var(--font-poppins)]  text-gray-400">
-          Ready to find the perfect name? Click the 'Generate' button and
+          Ready to find the perfect name? Click the &apos;Generate&apos; button and
           discover a list of unique and creative names that fit your
           preferences!
         </p>

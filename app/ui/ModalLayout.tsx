@@ -1,5 +1,4 @@
 import { CircleX } from 'lucide-react'
-import { title } from 'process'
 type props = {
   children: React.ReactNode
   ref: React.RefObject<HTMLDialogElement | null>
