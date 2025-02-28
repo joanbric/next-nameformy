@@ -49,7 +49,13 @@ export default function Generate({
   const handleGenerateName = async () => {
 
 
-     const res = await fetch(`/api/generate?subject=${subject}`)
+     const res = await fetch(`/api/generate`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({subject, characteristic, meaning, language, keywords})
+     })
     //  const res = await generateName({subject, characteristic, meaning, language, keywords})
     //  setResponse(res.res)
     const data = await res.json()
