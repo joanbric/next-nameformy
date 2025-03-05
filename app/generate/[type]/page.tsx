@@ -1,6 +1,9 @@
 'use client'
-import { use, useState } from 'react'
+import { use, useRef, useState } from 'react'
 import './styles.css'
+import NamesSuggested from '@ui/NamesSuggested'
+import { AIResponse } from '@/types'
+import ModalLayout from '@/ui/ModalLayout'
 const characteristics = [
   'Short and catchy',
   'Descriptive and informative',
@@ -24,9 +27,17 @@ function Prompt({
   keywords: string | null
 }) {
   return (
-    <div className='prompt font-[family-name:var(--font-calistoga)]'>
-      <h1><span className='secondary'>Generate NameForMy</span> {type}</h1>
-      <p> <span className='secondary'>must be</span> {characteristic} <span className='secondary'>in</span> {language} <span className='secondary'>meaning</span> {meaning} <span className='secondary'>in addition:</span> {keywords}</p>
+    <div className="prompt font-[family-name:var(--font-calistoga)]">
+      <h1>
+        <span className="secondary">Generate NameForMy</span> {type}
+      </h1>
+      <p>
+        {' '}
+        <span className="secondary">must be</span> {characteristic}{' '}
+        <span className="secondary">in</span> {language}{' '}
+        <span className="secondary">meaning</span> {meaning}{' '}
+        <span className="secondary">in addition:</span> {keywords}
+      </p>
     </div>
   )
 }
@@ -46,25 +57,66 @@ export default function Generate({
   const [language, setLanguage] = useState<string | null>(null)
   const [keywords, setKeywords] = useState<string | null>(null)
   const subject = decodeURIComponent(use(params).type)
+  const ref = useRef<HTMLDialogElement | null>(null)
+  const [response, setResponse] = useState<AIResponse[] | null>(null)
+  const [limitExceeded, setLimitExceeded] = useState(false)
+
   const handleGenerateName = async () => {
-
-
-     const res = await fetch(`/api/generate`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({subject, characteristic, meaning, language, keywords})
-     })
+    const res = await fetch(`/api/generate`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        subject,
+        characteristic,
+        meaning,
+        language,
+        keywords
+      })
+    })
     //  const res = await generateName({subject, characteristic, meaning, language, keywords})
     //  setResponse(res.res)
-    const data = await res.json()
 
-     console.log(data)
+    console.log('El estado es:', res.status)
+    if (!res.ok) {
+      if (res.status === 429) {
+        setLimitExceeded(true)
+        setResponse(null)
+        ref.current?.showModal()
+        return
+      }
+    } else if (limitExceeded === true) {
+      setLimitExceeded(false)
+    }
+    const data = await res.json()
+    console.log(data)
+    const { name, IPA, valueMeaning, advantages, disadvantages } = data
+    setResponse([
+      {
+        name,
+        IPA,
+        meaning: valueMeaning,
+        advantages,
+        disadvantages
+      }
+    ])
+
+    ref.current?.showModal()
   }
 
   return (
     <main className="max-w-[1000px] mx-auto px-4">
+      {limitExceeded && <ModalLayout title="Name Suggested" ref={ref}>
+          <p>Has excedido el limite de nombres que puedes generar</p>
+        </ModalLayout>}
+      {!limitExceeded && response && (
+        <NamesSuggested
+          ref={ref}
+          response={response}
+          handleClick={handleGenerateName}
+        />
+      )}
       <Prompt
         type={subject}
         characteristic={characteristic}
@@ -78,7 +130,12 @@ export default function Generate({
         <ul className="flex flex-wrap gap-3 max-w-[800px] mb-3">
           {characteristics.map((characteristic, index) => (
             <li key={index}>
-              <button className='charac-item' onClick={() => {setCharacteristics(characteristic)}}>
+              <button
+                className="charac-item"
+                onClick={() => {
+                  setCharacteristics(characteristic)
+                }}
+              >
                 {characteristic}
               </button>
             </li>
@@ -90,7 +147,7 @@ export default function Generate({
           className="w-full max-w-[50ch] "
           type="text"
           placeholder="Other (please specify)"
-aria-label="Specify other characteristic"
+          aria-label="Specify other characteristic"
         />
         <h2>A specific etymology or meaning </h2>
         <input
@@ -116,8 +173,7 @@ aria-label="Specify other characteristic"
           onChange={(e) => setKeywords(e.target.value)}
           name=""
           id=""
-          className='w-full max-w-[50ch] '
-          
+          className="w-full max-w-[50ch] "
           placeholder={TEXTAREA_PLACEHOLDER}
         ></textarea>
         <h2>
@@ -127,7 +183,12 @@ aria-label="Specify other characteristic"
         </h2>
       </section>
 
-      <button onClick={handleGenerateName} className='text-[1rem] mt-8 font-[family-name:var(--font-poppins)] bg-primary py-3 px-5 rounded-lg font-bold'>Generate name</button>
+      <button
+        onClick={handleGenerateName}
+        className="text-[1rem] mt-8 font-[family-name:var(--font-poppins)] bg-primary py-3 px-5 rounded-lg font-bold"
+      >
+        Generate name
+      </button>
       <aside>
         <h4>Please note</h4>
         <p>
