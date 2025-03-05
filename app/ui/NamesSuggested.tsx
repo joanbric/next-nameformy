@@ -12,16 +12,16 @@ export default function NamesSuggested({ ref, response, handleClick }: props) {
         response.map((name, index) => (
           <div key={index}>
             <h2>
-              {name.name} | {name.IPA}
+              {name.name} ( <small className='font-mono'>{name.IPA}</small>)
             </h2>
             <p>
               <b>Meaning:</b> {name.meaning}
             </p>
             <p>
-              <b>Pros:</b> {name.pros}
+              <b>Advantages:</b> {name.advantages}
             </p>
             <p>
-              <b>Cons:</b> {name.cons}
+              <b>Disadvantages:</b> {name.disadvantages}
             </p>
           </div>
         ))}

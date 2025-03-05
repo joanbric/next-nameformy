@@ -20,10 +20,10 @@ const responseSchema: Schema = {
       IPA: {
         type: SchemaType.STRING
       },
-      pros: {
+      advantages: {
         type: SchemaType.STRING
       },
-      cons: {
+      disadvantages: {
         type: SchemaType.STRING
       }
     },
@@ -31,8 +31,8 @@ const responseSchema: Schema = {
       "name",
       "meaning",
       "IPA",
-      "pros",
-      "cons"
+      "advantages",
+      "disadvantages"
     ]
   }
 }
